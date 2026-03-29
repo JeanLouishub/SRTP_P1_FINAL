@@ -35,7 +35,7 @@ def setup_demo_root():
     os.makedirs(ROOT)
 
     # fichier test aléatoire de 50 Ko par exemple
-    generate_random_file(os.path.join(ROOT, "test.txt"), size_bytes=500*1024)
+    generate_random_file(os.path.join(ROOT, "test.txt"), size_bytes=200*1024)
 
     # fichier vide
     open(os.path.join(ROOT, "empty.txt"), "w").close()

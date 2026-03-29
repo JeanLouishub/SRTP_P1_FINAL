@@ -227,11 +227,11 @@ def test_split_data(): # à faire sur les packet type 3 quand implémenter
     data = b"a"*3000
     result = split_data(data)
 
-    assert len(result) == 4,'test_split_data fail'
+    assert len(result) == 3,'test_split_data fail'
     assert len(result[0].payload) == 1024,'test_split_data part 1 fail'
     assert len(result[1].payload) == 1024,'test_split_data part 2 fail'
     assert len(result[2].payload) == 952,'test_split_data part 3 fail'
-    assert len(result[3].payload) == 0,'test_split_data part 4 fail'
+    #assert len(result[3].payload) == 0,'test_split_data part 4 fail'
 
 def test_latency_computation():
     t1 = compute_timestamp()

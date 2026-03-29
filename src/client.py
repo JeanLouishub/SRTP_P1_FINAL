@@ -77,8 +77,9 @@ def client(hostname,port,path,savefile):
         request = send_request(sock, hostname, port, path)
         requests.append(request)
         #on attend un pacquet pendant max 1sec
-        sock.settimeout(1)
+        sock.settimeout(0.01)
 
+        last_ack = 0
         while True:
             #plutot que d'attendre l'arrivée d'un paquet indéfiniment,le programme peut réenvoyer la requete
             try:
@@ -112,7 +113,9 @@ def client(hostname,port,path,savefile):
                 packet = decode_pack(packet_server)
                 if (packet == None):
                     #le pequet est corrompu
+                    """
                     print("invalid packet")
+                    """
                     continue
                 """
                 print("\nclient recieve : \n"
@@ -153,6 +156,7 @@ def client(hostname,port,path,savefile):
                         f"timestamp : {timestamp}\n"
                         )
                         """
+                        last_ack = window.base_seqnum
                         
                             
                         #si l'écriture du fichier est fini
@@ -173,6 +177,7 @@ class Window:
         self.file_written = False # écriture du fichier fini ? 
         self.file = open(self.path, "wb")
 
+    
     def in_window(self, seqnum):
         """Vérifie si un seqnum est dans la fenêtre de réception [base, base+window_size["""
         if self.base_seqnum + self.window_size < MAX_SEQNUM:
@@ -180,9 +185,9 @@ class Window:
         else:
             #cas limite
             return   self.base_seqnum <= seqnum < MAX_SEQNUM  or  0 <= seqnum < (self.base_seqnum + self.window_size) % MAX_SEQNUM
-
+    
+    
     def is_already_received(self, seqnum):
-        """Vérifie si un seqnum est déjà traité (avant base_seqnum)"""
         for i in range(1, self.window_size + 1):
             if seqnum == (self.base_seqnum - i) % MAX_SEQNUM:
                 return True
@@ -219,7 +224,7 @@ class Window:
 
     def write_packets(self):
         """écrit tout les paquets conséqutifs à partir de base_seqnum dans le fichier"""
-        while self.base_seqnum in self.packets.keys():
+        while self.base_seqnum in self.packets:
             packet = self.packets.pop(self.base_seqnum)
             self.write_in_file(packet.payload)
 

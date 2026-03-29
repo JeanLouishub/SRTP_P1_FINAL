@@ -1,0 +1,700 @@
+commit 8ef617123c6444bb24c2fe73b98652de680d8979
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Mon Mar 23 21:37:18 2026 +0100
+
+    final
+
+ README.txt  |   8 ++++++++
+ rapport.pdf | Bin 0 -> 192655 bytes
+ 2 files changed, 8 insertions(+)
+
+commit 48dcbe3347ea862c8c537196899a8fb90b674391
+Merge: c32b26d 56db950
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Mon Mar 23 14:44:45 2026 +0100
+
+    tests
+
+commit 56db95024cdcf20cd93fc719807b53fe90dd22a6
+Author: Johnny-prog270 <johnthiry270@gmail.com>
+Date:   Mon Mar 23 05:06:27 2026 +0100
+
+    version finale du projet
+
+ demo_root/empty.txt                       |   0
+ demo_root/test.txt                        |   1 -
+ file.txt                                  |   0
+ src/__pycache__/client.cpython-313.pyc    | Bin 0 -> 9341 bytes
+ src/__pycache__/code_pack.cpython-313.pyc | Bin 5430 -> 5430 bytes
+ src/__pycache__/server.cpython-313.pyc    | Bin 0 -> 7888 bytes
+ src/client.py                             | 245 +++++++++++--------
+ src/secret.txt                            |   0
+ src/server.py                             | 377 +++++++++++++-----------------
+ tests/Linksimulator-master/link_sim.c     |   2 +-
+ tests/demo_root/all.txt                   | 171 ++++++++++++++
+ tests/demo_root/client5.log               |   9 -
+ tests/demo_root/server1.log               |   7 -
+ tests/demo_root/server3.log               |   7 -
+ tests/demo_root/server4.log               |   7 -
+ tests/demo_root/server5.log               |   7 -
+ tests/tests.py                            |  23 +-
+ 17 files changed, 485 insertions(+), 371 deletions(-)
+
+commit c32b26d01db6811a1a3bc20d0e971f99cf9665dc
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Sun Mar 22 22:19:41 2026 +0100
+
+    mod
+
+ src/server.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit bca747a393760258c687a00226f0f2a37446047d
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Sun Mar 22 22:18:49 2026 +0100
+
+    mod
+
+ src/server.py | 42 ++++++++++++++++++++++++++++--------------
+ 1 file changed, 28 insertions(+), 14 deletions(-)
+
+commit 5cb6a1b43f4a09b140e87c04b5298c88c3b52042
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Sun Mar 22 21:45:49 2026 +0100
+
+    changes
+
+ demo_root/client1.log |   1 +
+ demo_root/client2.log |   1 +
+ demo_root/client3.log |   1 +
+ demo_root/client4.log |   1 +
+ demo_root/client5.log |   1 +
+ demo_root/server1.log |   1 +
+ demo_root/server2.log |   1 +
+ demo_root/server3.log |   1 +
+ demo_root/server4.log |   1 +
+ demo_root/server5.log |   1 +
+ file.txt              |  22 ++++++++++
+ src/secret.txt        |  22 ++++++++++
+ src/server.py         | 115 +++++++++++++++++++++++++++++++++-----------------
+ 13 files changed, 131 insertions(+), 38 deletions(-)
+
+commit 3548a372a27ea615adb8ed8a6485bc71d8833493
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Sun Mar 22 21:44:20 2026 +0100
+
+    endoftransfer
+
+ tests/demo_root/all.txt     |  0
+ tests/demo_root/client5.log |  9 ---------
+ tests/demo_root/server5.log |  0
+ tests/scripttests.sh        | 39 ++++++++++++++++++++-------------------
+ 4 files changed, 20 insertions(+), 28 deletions(-)
+
+commit 15a92b04fa9954b659074f572a000ad1fdbfb0e2
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Sun Mar 22 20:18:28 2026 +0100
+
+    presque final
+
+ tests/demo_root/client5.log   |   8 +--
+ tests/demo_root/corrupt.txt   | 148 -----------------------------------------
+ tests/demo_root/normal.txt    | 148 -----------------------------------------
+ tests/demo_root/server1.log   |   7 --
+ tests/demo_root/server3.log   |   7 --
+ tests/demo_root/server4.log   |   7 --
+ tests/demo_root/server5.log   |   7 --
+ tests/demo_root/test.txt      | 148 -----------------------------------------
+ tests/demo_root/truncated.txt | 148 -----------------------------------------
+ tests/scripttests.sh          | 150 +-----------------------------------------
+ 10 files changed, 5 insertions(+), 773 deletions(-)
+
+commit dd3217a8baa5c487846b7c7261d4843af9438ffc
+Merge: b11efec cbca56d
+Author: JeanLouishub <jean-louis.peffer@student.uclouvain.be>
+Date:   Sun Mar 22 18:43:22 2026 +0100
+
+    Merge pull request #7 from JeanLouishub/almost_final
+    
+    new_branch
+
+commit cbca56da5942b8a96e8b3ac62ea2b02cc8037b3a
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Sun Mar 22 18:42:04 2026 +0100
+
+    new_branch
+
+ client3.log                                  |   1 -
+ client4.log                                  |   1 -
+ file.txt                                     | 124 ------
+ server1.log                                  |   1 -
+ server3.log                                  |   1 -
+ server4.log                                  |   1 -
+ src/secret.txt                               | 124 ------
+ src/server.py                                |  46 +-
+ tests/Linksimulator-master/.gitignore        |   3 +
+ tests/Linksimulator-master/LICENSE           |  22 +
+ tests/Linksimulator-master/Makefile          |  35 ++
+ tests/Linksimulator-master/README.md         |  26 ++
+ tests/Linksimulator-master/link_sim.c        | 601 +++++++++++++++++++++++++++
+ tests/Linksimulator-master/min_queue.c       | 170 ++++++++
+ tests/Linksimulator-master/min_queue.h       |  66 +++
+ tests/corrupt.txt                            |   1 -
+ tests/{client1.log => demo_root/all.txt}     |   0
+ tests/{client3.log => demo_root/client1.log} |   0
+ tests/{client4.log => demo_root/client2.log} |   0
+ tests/{server3.log => demo_root/client3.log} |   0
+ tests/{server4.log => demo_root/client4.log} |   0
+ tests/demo_root/client5.log                  |   9 +
+ tests/demo_root/corrupt.txt                  | 171 ++++++++
+ tests/demo_root/empty.txt                    |   0
+ tests/demo_root/empty_out.txt                |   0
+ tests/demo_root/normal.txt                   | 171 ++++++++
+ tests/demo_root/server1.log                  |   7 +
+ tests/demo_root/server2.log                  |   0
+ tests/demo_root/server3.log                  |   7 +
+ tests/demo_root/server4.log                  |   7 +
+ tests/demo_root/server5.log                  |   7 +
+ tests/demo_root/test.txt                     | 172 +++++++-
+ tests/demo_root/truncated.txt                | 171 ++++++++
+ tests/normal.txt                             |   1 -
+ tests/scripttests.sh                         | 172 +++++++-
+ tests/server1.log                            |   7 -
+ tests/truncated.txt                          |   1 -
+ 37 files changed, 1845 insertions(+), 281 deletions(-)
+
+commit b11efec8bee61057c413df16dd26ef840ebe5e3e
+Author: Johnny-prog270 <johnthiry270@gmail.com>
+Date:   Sun Mar 22 18:37:37 2026 +0100
+
+    correction window client.py
+
+ src/__pycache__/code_pack.cpython-313.pyc | Bin 5367 -> 5430 bytes
+ src/client.py                             |  28 ++++++++++++++--------------
+ 2 files changed, 14 insertions(+), 14 deletions(-)
+
+commit 59ee85907309785b39ea992fc8a99ba943498cc3
+Author: Johnny-prog270 <johnthiry270@gmail.com>
+Date:   Sun Mar 22 18:34:10 2026 +0100
+
+    correction window client.py
+
+ tests/client1.log   | 0
+ tests/client3.log   | 0
+ tests/client4.log   | 0
+ tests/corrupt.txt   | 1 -
+ tests/normal.txt    | 1 -
+ tests/server1.log   | 7 -------
+ tests/server3.log   | 0
+ tests/server4.log   | 0
+ tests/truncated.txt | 1 -
+ 9 files changed, 10 deletions(-)
+
+commit 700bf4472f4db33fbec07fda0bad6fd02095ad74
+Author: Evaneetvelde <ericvaneetvelde01@gmail.com>
+Date:   Sun Mar 22 17:35:49 2026 +0100
+
+    normalement c bon
+
+ tests/scripttests.sh | 73 +++++++++++++++++++++++++++++-----------------------
+ 1 file changed, 41 insertions(+), 32 deletions(-)
+
+commit cd3f9dd81758414f35f7e4e85ca67bca85768224
+Merge: 48365f0 e6f83d9
+Author: Evaneetvelde <ericvaneetvelde01@gmail.com>
+Date:   Sun Mar 22 17:24:34 2026 +0100
+
+    Merge branch 'main' of https://github.com/JeanLouishub/SRTP_P1
+
+commit e6f83d9861eca48abab8d6c0f3ec55be4d8122d7
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Sun Mar 22 17:23:42 2026 +0100
+
+    small
+
+ src/__pycache__/client.cpython-312.pyc    | Bin 0 -> 7337 bytes
+ src/__pycache__/code_pack.cpython-312.pyc | Bin 5340 -> 5340 bytes
+ src/__pycache__/server.cpython-312.pyc    | Bin 0 -> 7803 bytes
+ src/client.py                             |   2 +-
+ src/server.py                             |   4 ++--
+ tests/client1.log                         |   0
+ tests/client3.log                         |   0
+ tests/client4.log                         |   0
+ tests/corrupt.txt                         |   1 +
+ tests/perf_graph.png                      | Bin 0 -> 37751 bytes
+ tests/perf_test_root/file_1024.bin        | Bin 0 -> 1024 bytes
+ tests/perf_test_root/file_10240.bin       | Bin 0 -> 10240 bytes
+ tests/perf_test_root/file_15360.bin       | Bin 0 -> 15360 bytes
+ tests/perf_test_root/file_3072.bin        | Bin 0 -> 3072 bytes
+ tests/perf_test_root/file_5120.bin        | Bin 0 -> 5120 bytes
+ tests/perf_test_root/file_7168.bin        | Bin 0 -> 7168 bytes
+ tests/server3.log                         |   0
+ tests/server4.log                         |   0
+ tests/truncated.txt                       |   1 +
+ 19 files changed, 5 insertions(+), 3 deletions(-)
+
+commit 48365f095799ea56e94ddbf23f82822c701cad7c
+Merge: db25830 4bc5fdd
+Author: Evaneetvelde <ericvaneetvelde01@gmail.com>
+Date:   Sun Mar 22 17:17:47 2026 +0100
+
+    Merge branch 'main' of https://github.com/JeanLouishub/SRTP_P1
+
+commit 4bc5fdd89d65ba5f475981e48b09ae6ce91862db
+Author: Johnny-prog270 <johnthiry270@gmail.com>
+Date:   Sun Mar 22 17:16:18 2026 +0100
+
+    correction paquet ack
+
+ client3.log                               |   1 +
+ client4.log                               |   1 +
+ demo_root/empty.txt                       |   0
+ demo_root/test.txt                        |   1 +
+ server1.log                               |   1 +
+ server3.log                               |   1 +
+ server4.log                               |   1 +
+ src/__pycache__/code_pack.cpython-313.pyc | Bin 3864 -> 5367 bytes
+ src/client.py                             |   4 ++--
+ 9 files changed, 8 insertions(+), 2 deletions(-)
+
+commit 8fdce17d7edc66bfc27a63bd5d3981329bf4f43f
+Author: Johnny-prog270 <johnthiry270@gmail.com>
+Date:   Sun Mar 22 17:12:35 2026 +0100
+
+    correction paquet ack
+
+ tests/demo_root/test.txt | 1 +
+ tests/normal.txt         | 1 +
+ tests/server1.log        | 7 +++++++
+ 3 files changed, 9 insertions(+)
+
+commit db25830d44776b6a815c38872270858516483b6d
+Merge: f4c04cd 101f2b0
+Author: Evaneetvelde <ericvaneetvelde01@gmail.com>
+Date:   Sun Mar 22 17:09:07 2026 +0100
+
+    Merge branch 'main' of https://github.com/JeanLouishub/SRTP_P1
+
+commit 101f2b0e2bfa4b55af94eea3ae298647b4c1102b
+Merge: 588ed51 6ae30fd
+Author: JeanLouishub <jean-louis.peffer@student.uclouvain.be>
+Date:   Sun Mar 22 16:58:12 2026 +0100
+
+    Merge pull request #6 from JeanLouishub/serverV4
+    
+    Server v4
+
+commit 588ed51f77cf5909c3a38a6b6e0d56513708f168
+Author: Johnny-prog270 <johnthiry270@gmail.com>
+Date:   Sun Mar 22 16:56:00 2026 +0100
+
+    correction paquet ack
+
+ src/client.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+commit 6ae30fd6413c7781429d141e06ee60cfbec6b580
+Merge: 6862add e4f6f5e
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Sun Mar 22 16:47:16 2026 +0100
+
+    Merge branch 'main' of github.com:JeanLouishub/SRTP_P1 into serverV4
+
+commit 6862add3b30d3ac5d5fc838f6156412466df7209
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Sun Mar 22 16:47:04 2026 +0100
+
+    new_branch
+
+ perf.py                                   |   2 +-
+ src/__pycache__/code_pack.cpython-312.pyc | Bin 5219 -> 5340 bytes
+ src/client.py                             |   2 +-
+ src/code_pack.py                          |   8 +-
+ src/server.py                             | 144 +++++++++++++++---------------
+ tests/scripttests.sh                      |   0
+ 6 files changed, 80 insertions(+), 76 deletions(-)
+
+commit f4c04cd539a17cfae3537348ae5e6cb2a408594d
+Merge: 976f931 e4f6f5e
+Author: Evaneetvelde <ericvaneetvelde01@gmail.com>
+Date:   Sun Mar 22 16:45:11 2026 +0100
+
+    Merge branch 'main' of https://github.com/JeanLouishub/SRTP_P1
+
+commit e4f6f5e57bbc6d3ad714085d3197c4d7316e2339
+Author: Johnny-prog270 <johnthiry270@gmail.com>
+Date:   Sun Mar 22 16:42:54 2026 +0100
+
+    correction window
+
+ src/client.py | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+commit 976f9317e1328cf80ed3824438a21b7ee4ac09e3
+Author: Evaneetvelde <ericvaneetvelde01@gmail.com>
+Date:   Sun Mar 22 13:26:54 2026 +0100
+
+    update
+
+ perf.py | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+commit b8d7dbff6ba92ecbe21e7f70fabd15f0b6b517c0
+Author: Evaneetvelde <ericvaneetvelde01@gmail.com>
+Date:   Sun Mar 22 00:25:35 2026 +0100
+
+    benchmark perf
+
+ perf.py | 81 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 81 insertions(+)
+
+commit ebb91cada6c06ba47d0d768b8328c5239c38c368
+Author: Evaneetvelde <ericvaneetvelde01@gmail.com>
+Date:   Sat Mar 21 23:14:32 2026 +0100
+
+    fix
+
+ tests/{tests.sh => scripttests.sh} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 0873ff6bdf31855bbf0e7de75d40e9cd4d11e1b3
+Author: Evaneetvelde <ericvaneetvelde01@gmail.com>
+Date:   Sat Mar 21 23:12:29 2026 +0100
+
+    script tests
+
+ tests/tests.sh | 100 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 100 insertions(+)
+
+commit 0b568cf0c7fccc35ad3d68913fbe7cf87eb0fd22
+Author: Evaneetvelde <ericvaneetvelde01@gmail.com>
+Date:   Sat Mar 21 23:05:16 2026 +0100
+
+    test intéraction serveur client
+
+ src/client.py    | 8 ++++++++
+ src/code_pack.py | 2 ++
+ src/server.py    | 2 +-
+ tests/tests.py   | 5 +----
+ 4 files changed, 12 insertions(+), 5 deletions(-)
+
+commit 0e55f7d34aff11228a1370b6c2b0e20e7f3159c7
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Thu Mar 19 17:00:56 2026 +0100
+
+    ca marche mnt
+
+ file.txt | 124 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 124 insertions(+)
+
+commit e2616adf4fbc7ea5921fb35e3b1f8f6c24e3de24
+Merge: 356e4af 3cdbbfa
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Thu Mar 19 16:57:17 2026 +0100
+
+    ca marche mnt
+
+commit 3cdbbfa56bdbc6887bdf878ef0ff9f1fcf18da84
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Thu Mar 19 16:51:14 2026 +0100
+
+    new_branch
+
+ file.txt | 124 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 124 insertions(+)
+
+commit 3f6818e4d78bf4e79073f2723c817bd0ee732053
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Thu Mar 19 16:49:57 2026 +0100
+
+    working client/server
+
+ src/__pycache__/code_pack.cpython-312.pyc | Bin 5164 -> 5164 bytes
+ src/client.py                             |   2 +-
+ src/file.txt                              |   0
+ 3 files changed, 1 insertion(+), 1 deletion(-)
+
+commit 356e4af33ece19b86d59859b1a37decbfc4eddac
+Merge: 6560d63 520a8fd
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Thu Mar 19 16:29:47 2026 +0100
+
+    main updt
+
+commit 520a8fd7fb5cc5e47ad5effa36b8d0a397a0d136
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Thu Mar 19 16:26:51 2026 +0100
+
+    packinfo
+
+ src/code_pack.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+commit 6560d6320ceff871b4fc859b2a1f986a0da841fb
+Merge: 7d8786b 95613d7
+Author: JeanLouishub <jean-louis.peffer@student.uclouvain.be>
+Date:   Thu Mar 19 16:13:26 2026 +0100
+
+    Merge pull request #5 from JeanLouishub/serverV3
+    
+    Merge pull request #4 from JeanLouishub/main
+
+commit 95613d703a76459a3c370480440279b6e90dd011
+Merge: b4d6127 7d8786b
+Author: JeanLouishub <jean-louis.peffer@student.uclouvain.be>
+Date:   Thu Mar 19 16:12:49 2026 +0100
+
+    Merge pull request #4 from JeanLouishub/main
+    
+    serverV3
+
+commit 7d8786bd6f0def07d926f724cb7b011792811084
+Author: Evaneetvelde <ericvaneetvelde01@gmail.com>
+Date:   Sat Mar 14 23:43:32 2026 +0100
+
+    test description
+
+ src/code_pack.py |  1 -
+ tests/tests.py   | 87 ++++++++++++++++++++++++++++----------------------------
+ 2 files changed, 43 insertions(+), 45 deletions(-)
+
+commit f275364768bcee7d71fe604e9b094a6f8ba9dda7
+Author: Evaneetvelde <ericvaneetvelde01@gmail.com>
+Date:   Sat Mar 14 23:32:37 2026 +0100
+
+    migration vers pytest car consigne
+
+ file.txt         |   0
+ rapport.pdf      |   0
+ src/client.py    |   2 +-
+ src/code_pack.py |  10 +-
+ tests/tests.py   | 363 +++++++++++++++++++++++++++----------------------------
+ 5 files changed, 184 insertions(+), 191 deletions(-)
+
+commit 18cf31353d1b4a9c393674a77fd181000f04ddc8
+Author: Evaneetvelde <ericvaneetvelde01@gmail.com>
+Date:   Sat Mar 14 07:46:44 2026 +0100
+
+    fix simples tests and code
+
+ src/code_pack.py | 10 +++++++--
+ tests/tests.py   | 62 +++++++++++++++++++++++++++++---------------------------
+ 2 files changed, 40 insertions(+), 32 deletions(-)
+
+commit eb9cb101e6068e17266f1bbbc7b1c469068b3413
+Author: Evaneetvelde <ericvaneetvelde01@gmail.com>
+Date:   Fri Mar 13 18:48:46 2026 +0100
+
+    comme ça vous checkez ma prog
+
+ src/client.py    |   8 ++--
+ src/code_pack.py |  52 +++++------------------
+ src/server.py    |  15 +------
+ tests/tests.py   | 126 +++++++++++++++++++++++++++++++++++++++++++++++++------
+ 4 files changed, 128 insertions(+), 73 deletions(-)
+
+commit ccc9c7ed8acd55404455afd61f93f19693ce35f4
+Merge: 783bba7 1abcd8e
+Author: Evaneetvelde <ericvaneetvelde01@gmail.com>
+Date:   Fri Mar 13 17:14:58 2026 +0100
+
+    Merge branch 'main' of https://github.com/JeanLouishub/SRTP_P1
+    hein ?
+
+commit 783bba7a409740c5497dca41a0fb35e1c13e894c
+Author: Evaneetvelde <ericvaneetvelde01@gmail.com>
+Date:   Fri Mar 13 17:14:24 2026 +0100
+
+    merge
+
+ src/client.py    |  14 +----
+ src/code_pack.py |   1 -
+ src/server.py    |   2 +
+ tests/tests.py   | 181 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 186 insertions(+), 12 deletions(-)
+
+commit 1abcd8e63824aa26840dad003c038e059cbaaf25
+Merge: 32c499c b4d6127
+Author: JeanLouishub <jean-louis.peffer@student.uclouvain.be>
+Date:   Fri Mar 13 17:03:03 2026 +0100
+
+    Merge pull request #3 from JeanLouishub/serverV3
+    
+    new branch
+
+commit 32c499c3ce5153a3a17cc53d642d4f03329edc11
+Author: Johnny-prog270 <johnthiry270@gmail.com>
+Date:   Fri Mar 13 16:25:44 2026 +0100
+
+    modification du client pour suporter adresses entouré de crochets
+
+ src/client.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit b4d6127c6380a2c8a3410d1c4871eeef54f353dc
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Fri Mar 13 15:08:55 2026 +0100
+
+    new branch
+
+ file.txt                                  |   0
+ src/__pycache__/code_pack.cpython-312.pyc | Bin 2365 -> 5164 bytes
+ src/client.py                             |   4 +-
+ src/code_pack.py                          |  52 ++++++++++---
+ src/file.txt                              |   0
+ src/secret.txt                            | 124 ++++++++++++++++++++++++++++++
+ src/server.py                             |  83 +++++++++++++-------
+ 7 files changed, 224 insertions(+), 39 deletions(-)
+
+commit 327a3f06d318b574ad90c06b503923a35f36be5a
+Author: Johnny-prog270 <johnthiry270@gmail.com>
+Date:   Thu Mar 12 11:36:15 2026 +0100
+
+     correction parse_args
+
+ src/__pycache__/code_pack.cpython-313.pyc | Bin 0 -> 3864 bytes
+ src/client.py                             |  14 ++++++++------
+ 2 files changed, 8 insertions(+), 6 deletions(-)
+
+commit ed19a2577d6bddf1bb9f3b15c045d97dcd849166
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Wed Mar 11 21:51:07 2026 +0100
+
+    class
+
+ src/code_pack.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 37274fdcb25506ba45bd3743159703e4f0d0b834
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Wed Mar 11 21:49:08 2026 +0100
+
+    class
+
+ src/code_pack.py | 31 +++++++++++++++++++++----------
+ 1 file changed, 21 insertions(+), 10 deletions(-)
+
+commit 1e1466c278b5fe48841f40d397739b23e22fd49f
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Wed Mar 11 21:32:34 2026 +0100
+
+    main server
+
+ src/server.py | 126 ++++++++++++++++++++++++++++++++++++++--------------------
+ 1 file changed, 84 insertions(+), 42 deletions(-)
+
+commit 44395d85ca0bdb115be4a790a74b69051369afcf
+Author: Johnny-prog270 <johnthiry270@gmail.com>
+Date:   Wed Mar 11 21:24:33 2026 +0100
+
+     code client.py fonctionnel
+
+ src/client.py | 182 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 182 insertions(+)
+
+commit 29b3b7ef797dff7cc6cd2f17f0d237a911da3428
+Merge: 6954bb0 0332ecb
+Author: JeanLouishub <jean-louis.peffer@student.uclouvain.be>
+Date:   Wed Mar 11 14:21:04 2026 +0100
+
+    Merge pull request #1 from JeanLouishub/server_branch
+    
+    Server branch
+
+commit 0332ecbd125e52d7ece2648d1e64a0dff186f3ae
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Tue Mar 10 17:17:59 2026 +0100
+
+    server v1
+
+ src/server.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit c877abd7424c1773334fdf02eab0c9a52edc4cfc
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Mon Mar 9 14:00:32 2026 +0100
+
+    server
+
+ src/code_pack.py | 11 ++++++-----
+ src/server.py    |  6 +++---
+ 2 files changed, 9 insertions(+), 8 deletions(-)
+
+commit 28cf9d303d89bb8454647e499a4090010e0e7b8f
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Sun Mar 8 22:56:09 2026 +0100
+
+    small changes
+
+ src/server.py | 111 ++++++++++++++++++++++++++++++++++++++--------------------
+ 1 file changed, 74 insertions(+), 37 deletions(-)
+
+commit 2516b826fe04e244f729a728064e564c0895d17d
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Sun Mar 8 18:11:54 2026 +0100
+
+    server v1
+
+ src/__pycache__/code_pack.cpython-312.pyc | Bin 2347 -> 2365 bytes
+ src/server.py                             |  47 ++++++++++++++++++++----------
+ 2 files changed, 32 insertions(+), 15 deletions(-)
+
+commit 37df3371634af2a01755c4b3244ebc33a1445f08
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Sun Mar 8 17:01:20 2026 +0100
+
+    server_simple
+
+ src/code_pack.py |  7 +++--
+ src/server.py    | 89 +++++++++++++++++++++++++++++++++++++++++---------------
+ 2 files changed, 69 insertions(+), 27 deletions(-)
+
+commit d1b306951f0f521534153feb075fc8ffdd40fd18
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Sat Mar 7 20:46:17 2026 +0100
+
+    newbranch
+
+ src/__pycache__/code_pack.cpython-312.pyc | Bin 0 -> 2347 bytes
+ src/code_pack.py                          |  25 ++++++----
+ src/server.py                             |  74 +++++++++++++++++++++++++++++-
+ 3 files changed, 88 insertions(+), 11 deletions(-)
+
+commit 6954bb0db789ff2bc58dd93cab182a199b03cf09
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Sat Mar 7 16:04:04 2026 +0100
+
+    encoding/decoding
+
+ src/client.py | 2 ++
+ src/server.py | 1 +
+ 2 files changed, 3 insertions(+)
+
+commit 23f8f9ef38aedbd5e50bc77c15a291d5af6c85f6
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Sat Mar 7 16:02:41 2026 +0100
+
+    encoding/decoding
+
+ src/code_pack.py | 74 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
+
+commit f2ddc4c470e8f057e97c81f4b67be5163c28b16c
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Thu Mar 5 15:48:09 2026 +0100
+
+    files
+
+ src/client.py  | 0
+ src/server.py  | 0
+ tests/tests.py | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 1fbfaa99cf7833d1c772f367c34fab771b30b75e
+Author: jaypeebeats <jeanlouispeffer@gmail.com>
+Date:   Thu Mar 5 15:38:16 2026 +0100
+
+    init
+
+ rapport.pdf | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)

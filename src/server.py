@@ -260,7 +260,7 @@ class Session:
         # nombre de paquets acquittés cumulativement
         acked_count = (packet.seqnum - self.base_seqnum) % MAX_SEQNUM_MOD
 
-        """
+        
         # si ACK dupliqué (aucune avancée)
         if acked_count == 0:
             self.window_size = packet.window
@@ -269,7 +269,7 @@ class Session:
         # on ne supprime pas plus que la fenêtre courante
         if acked_count > self.window_size:
             return
-        """
+        
         for k in range(acked_count):
             seq = (self.base_seqnum + k) % MAX_SEQNUM_MOD
             if seq in self.packets:

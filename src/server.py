@@ -142,22 +142,40 @@ class Session:
         
         self.base_seqnum = 0 #seqnum du prochain paquet à envoyer
         self.window_size = packet.window # nombre de paquets que le client peut recevoir en même temps
-        self.packets = split_data(self.data)
+
+        self.chunk_offset = 0
+        self.batch_size = 2000
+        self.total_chunks = (len(self.data)+ MAX_PAYLOAD_LEN - 1) // MAX_PAYLOAD_LEN
+        
+        self.packets = {}
         self.last_send_check = 0
         
+        self.load_next_batch()
         self.rtt = []
         self.rtt_len = 4    
         
         self.send_payloads_init()
 
+    def load_next_batch(self):
+        """Charge le batch suivant de paquets"""
+        self.packets = split_data(self.data, self.chunk_offset, self.batch_size)
+        self.base_seqnum = 0
+
+        # combien de chunks réellement chargés
+        loaded = len(self.packets)
+        self.chunk_offset += loaded
+        
     def client_space(self,seqnum):
         return self.packets[seqnum].timestamp == None
     
     def send_payloads(self):
-        now = compute_timestamp()
         
+        now = compute_timestamp()
+        """"
         if now - self.last_send_check < 5:
             return 
+        """
+        
         self.last_send_check = now
         
         j = 0
@@ -261,15 +279,6 @@ class Session:
         acked_count = (packet.seqnum - self.base_seqnum) % MAX_SEQNUM_MOD
 
         
-        # si ACK dupliqué (aucune avancée)
-        if acked_count == 0:
-            self.window_size = packet.window
-            return
-
-        # on ne supprime pas plus que la fenêtre courante
-        if acked_count > self.window_size:
-            return
-        
         for k in range(acked_count):
             seq = (self.base_seqnum + k) % MAX_SEQNUM_MOD
             if seq in self.packets:
@@ -281,25 +290,43 @@ class Session:
         self.window_size = packet.window
         
         
-        if not self.isdone():
-            self.send_payloads()
-        else:
-            self.done = True
+        # Si batch terminé
+        if len(self.packets) == 0:
+            # reste-t-il encore des données à charger ?
+            if self.chunk_offset < self.total_chunks:
+                self.load_next_batch()
+                self.send_payloads_init()
+            else:
+                self.done = True
         
             
     def isdone(self):
         """la session est terminée si tous les payloads ont été acquittés"""
-        return len(self.packets) == 0  
+        return self.done 
     
-     
-def split_data(data):
-    """divise les données en blocs de taille maximale MAX_PAYLOAD_LEN et retourne un dictionnaire {seqnum: packet}"""
-    """le dernier bloc est un bloc de taille 0 pour signaler la fin du transfert"""
+    
+def split_data(data,start_chunk=0,max_chunks=2000):
+    """
+    Découpe une portion du fichier en paquets numérotés de 0 à N-1.
+    start_chunk = index du premier chunk dans le fichier complet
+    max_chunks = nombre max de chunks dans ce batch
+    """
     packets = {}
+    start_byte = start_chunk*MAX_PAYLOAD_LEN
+    end_byte = min(len(data),start_byte+max_chunks*MAX_PAYLOAD_LEN)
+    
     n = 0
-    for i in range(0, len(data), MAX_PAYLOAD_LEN):
-        #timestamp = compute_timestamp()
-        packets[n] = Packetinfo(ptype = 1,window = 0, seqnum = n,  length = len(data[i:i + MAX_PAYLOAD_LEN]),payload = data[i:i + MAX_PAYLOAD_LEN], timestamp = None, rto = 2000)
+    for i in range(start_byte, end_byte, MAX_PAYLOAD_LEN):
+        payload = data[i:i + MAX_PAYLOAD_LEN]
+        packets[n] = Packetinfo(
+            ptype=1,
+            window=0,
+            seqnum=n,
+            length=len(payload),
+            payload=payload,
+            timestamp=None,
+            rto=2000
+        )
         n = (n+1) % MAX_SEQNUM_MOD
         
     #bloc de fin de transfert

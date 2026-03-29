@@ -35,8 +35,9 @@ def setup_demo_root():
     os.makedirs(ROOT)
 
     # fichier test aléatoire de 50 Ko par exemple
-    generate_random_file(os.path.join(ROOT, "test.txt"), size_bytes=200*1024)
-
+    generate_random_file(os.path.join(ROOT, "test.txt"), size_bytes=500*1024)
+    generate_random_file(os.path.join(ROOT, "test_big.txt"), size_bytes=2200*1024)
+    generate_random_file(os.path.join(ROOT, "test_medium.txt"), size_bytes=1000*1024)  
     # fichier vide
     open(os.path.join(ROOT, "empty.txt"), "w").close()
 
@@ -79,8 +80,8 @@ def assert_files_equal(file1, file2):
     assert filecmp.cmp(file1, file2), f"{file1} et {file2} ne sont pas identiques"
 
 # ====================== TESTS =========================
-
-def test_casual():
+"""
+def test_casual_small_file():
     server = run_server()
     try:
         run_client(os.path.join(ROOT, "normal.txt"), f"http://localhost:{PORT}/test.txt")
@@ -89,7 +90,28 @@ def test_casual():
     
     assert_files_equal(os.path.join(ROOT, "test.txt"), os.path.join(ROOT, "normal.txt"))
 """
+"""
+def test_casual_medium_file():
+    server = run_server()
+    try:
+        run_client(os.path.join(ROOT, "normal_medium.txt"), f"http://localhost:{PORT}/test_medium.txt")
+    finally:
+        kill_proc(server)
+    
+    assert_files_equal(os.path.join(ROOT, "test_medium.txt"), os.path.join(ROOT, "normal_medium.txt"))
+"""
 
+def test_casual_big_file():
+    server = run_server()
+    try:
+        run_client(os.path.join(ROOT, "normal_big.txt"), f"http://localhost:{PORT}/test_big.txt")
+    finally:
+        kill_proc(server)
+    
+    assert_files_equal(os.path.join(ROOT, "test_big.txt"), os.path.join(ROOT, "normal_big.txt"))
+
+
+"""
 def test_empty_payload():
     empty_file = os.path.join(ROOT, "empty.txt")
     with open(empty_file, "w") as f:

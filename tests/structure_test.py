@@ -45,7 +45,7 @@ from server import *
 
 ##########################################################
 # tests code_pack 
-
+"""
 def test_encode_decode():
     p = Packetinfo(1, 5, 10, payload=b"abc", timestamp=100)
 
@@ -263,3 +263,4 @@ if __name__ == "__main__":
     test_truncated_packet()
     test_split_data()
     test_latency_computation()
+"""

@@ -77,7 +77,7 @@ def client(hostname,port,path,savefile):
         request = send_request(sock, hostname, port, path)
         requests.append(request)
         #on attend un pacquet pendant max 1sec
-        sock.settimeout(0.01)
+        sock.settimeout(0.1)
 
         last_ack = 0
         while True:
@@ -176,7 +176,7 @@ class Window:
         self.path = path # chemin du fichier
         self.file_written = False # écriture du fichier fini ? 
         self.file = open(self.path, "wb")
-
+        self.received = set()
     
     def in_window(self, seqnum):
         """Vérifie si un seqnum est dans la fenêtre de réception [base, base+window_size["""
@@ -188,10 +188,7 @@ class Window:
     
     
     def is_already_received(self, seqnum):
-        for i in range(1, self.window_size + 1):
-            if seqnum == (self.base_seqnum - i) % MAX_SEQNUM:
-                return True
-        return False
+        return seqnum in self.received
 
     def add_packet(self, packet):
         """
@@ -200,23 +197,27 @@ class Window:
           - False sinon
         """
         seqnum = packet.seqnum
-
+    
+        
+        # Détection d'un nouveau batch :
+        # si on avait fini le batch précédent (base_seqnum > 0)
+        # et qu'on reçoit à nouveau seqnum 0
+        if seqnum == 0 and self.base_seqnum > 0 and len(self.packets) == 0:
+            self.reset_for_new_batch()
         # Paquet déjà reçu et traité
-        if self.is_already_received(seqnum):
+        elif self.is_already_received(seqnum):
             return True
-
         # Paquet hors fenêtre
-        if not self.in_window(seqnum):
+        elif not self.in_window(seqnum):
             return False
-
         # Paquet déjà dans le buffer
-        if seqnum in self.packets:
+        elif seqnum in self.packets:
             return False
-
         # Stocker le paquet
         self.packets[seqnum] = packet
 
         # Si c'est prochain paquet à inscrire dans le fichier
+        self.received.add(seqnum)
         if seqnum == self.base_seqnum:
             self.write_packets()
 
@@ -233,7 +234,11 @@ class Window:
 
             if self.file_written:  # paquet de fin détecté
                 break
-
+    
+    def reset_for_new_batch(self):
+        self.packets.clear()
+        self.received.clear()
+        self.base_seqnum = 0
 
 
     def write_in_file(self, payload):

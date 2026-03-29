@@ -325,7 +325,7 @@ def split_data(data,start_chunk=0,max_chunks=2000):
             length=len(payload),
             payload=payload,
             timestamp=None,
-            rto=2000
+            rto=500
         )
         n = (n+1) % MAX_SEQNUM_MOD
         

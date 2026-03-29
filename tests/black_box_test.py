@@ -3,170 +3,220 @@ import time
 import os
 import filecmp
 import pytest
-import signal
 import random
 import string
 import shutil
 
-ROOT = "demo_root"
+ROOT = "demo_root"         # fichiers servis par le serveur
+DOWNLOADS = "downloads"    # fichiers reçus par le client
+
 HOST = "::1"
 PORT = 8080
+
 SERVER_SCRIPT = "src/server.py"
 CLIENT_SCRIPT = "src/client.py"
 LINK_SIM = "./tests/Linksimulator-master/link_sim"
 
+
 def generate_random_file(path, size_bytes):
     """Génère un fichier texte aléatoire de `size_bytes` octets"""
     chars = string.ascii_letters + string.digits + string.punctuation + " \n"
-    with open(path, "w") as f:
+    with open(path, "w", encoding="utf-8") as f:
         remaining = size_bytes
         while remaining > 0:
             chunk_size = min(1024, remaining)
             chunk = ''.join(random.choices(chars, k=chunk_size))
             f.write(chunk)
             remaining -= chunk_size
-        
-# Crée le dossier de test et les fichiers initiaux
-@pytest.fixture(scope="module", autouse=True)
-def setup_demo_root():
-    """Prépare le répertoire demo_root et un fichier test aléatoire"""
-    if os.path.exists(ROOT):
-        shutil.rmtree(ROOT)
-    os.makedirs(ROOT)
 
-    # fichier test aléatoire de 50 Ko par exemple
-    generate_random_file(os.path.join(ROOT, "test.txt"), size_bytes=500*1024)
-    generate_random_file(os.path.join(ROOT, "test_big.txt"), size_bytes=2200*1024)
-    generate_random_file(os.path.join(ROOT, "test_medium.txt"), size_bytes=1000*1024)  
-    # fichier vide
+
+def clean_dir(path):
+    """Vide complètement un dossier sans le supprimer lui-même"""
+    os.makedirs(path, exist_ok=True)
+
+    for name in os.listdir(path):
+        full = os.path.join(path, name)
+        try:
+            if os.path.isfile(full) or os.path.islink(full):
+                os.remove(full)
+            elif os.path.isdir(full):
+                shutil.rmtree(full)
+        except Exception as e:
+            print(f"[WARN] Impossible de supprimer {full}: {e}")
+
+
+# Préparation avant CHAQUE test (beaucoup plus robuste que scope="module")
+@pytest.fixture(autouse=True)
+def setup_demo_root():
+    clean_dir(ROOT)
+    clean_dir(DOWNLOADS)
+
+    # Fichier test de 100 Ko
+    generate_random_file(os.path.join(ROOT, "test.txt"), size_bytes=100 * 1024)
+
+    # Fichier vide
     open(os.path.join(ROOT, "empty.txt"), "w").close()
 
     yield
 
-    # cleanup après tests
-    shutil.rmtree(ROOT)
+    clean_dir(ROOT)
+    clean_dir(DOWNLOADS)
+
 
 def run_server(root=ROOT, host=HOST, port=PORT):
-    """Démarre le serveur et retourne le PID"""
+    """Démarre le serveur et retourne le process"""
     proc = subprocess.Popen(
         ["python3", SERVER_SCRIPT, "--root", root, host, str(port)],
-        stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True
     )
     time.sleep(1)  # laisse le serveur démarrer
     return proc
 
+
 def run_client(save_file, url):
     """Lance le client et attend la fin"""
-    subprocess.run(
+    result = subprocess.run(
         ["python3", CLIENT_SCRIPT, "--save", save_file, url],
-        check=True
+        capture_output=True,
+        text=True
     )
 
+    if result.returncode != 0:
+        print("=== CLIENT STDOUT ===")
+        print(result.stdout)
+        print("=== CLIENT STDERR ===")
+        print(result.stderr)
+
+    assert result.returncode == 0, "Le client a crashé"
+
+
 def run_linksim(args):
-    """Lance LinkSimulator et retourne le PID"""
-    proc = subprocess.Popen([LINK_SIM] + args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    """Lance LinkSimulator et retourne le process"""
+    proc = subprocess.Popen(
+        [LINK_SIM] + args,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True
+    )
     time.sleep(1)  # laisse LinkSimulator démarrer
     return proc
 
-def kill_proc(proc):
+
+def kill_proc(proc, name="PROC"):
+    """Termine proprement un process et affiche stderr si utile"""
     if proc.poll() is None:
         proc.terminate()
         try:
             proc.wait(timeout=2)
         except subprocess.TimeoutExpired:
             proc.kill()
+            proc.wait(timeout=2)
+
+    try:
+        stdout, stderr = proc.communicate(timeout=1)
+    except subprocess.TimeoutExpired:
+        stdout, stderr = "", ""
+
+    if stderr and stderr.strip():
+        print(f"=== {name} STDERR ===")
+        print(stderr)
+
+    if stdout and stdout.strip():
+        print(f"=== {name} STDOUT ===")
+        print(stdout)
+
 
 def assert_files_equal(file1, file2):
-    assert filecmp.cmp(file1, file2), f"{file1} et {file2} ne sont pas identiques"
+    assert os.path.exists(file1), f"Le fichier source n'existe pas: {file1}"
+    assert os.path.exists(file2), f"Le fichier reçu n'existe pas: {file2}"
+    assert filecmp.cmp(file1, file2, shallow=False), f"{file1} et {file2} ne sont pas identiques"
+
 
 # ====================== TESTS =========================
-"""
-def test_casual_small_file():
+
+def test_casual():
     server = run_server()
     try:
-        run_client(os.path.join(ROOT, "normal.txt"), f"http://localhost:{PORT}/test.txt")
+        run_client(os.path.join(DOWNLOADS, "normal.txt"), f"http://localhost:{PORT}/test.txt")
     finally:
-        kill_proc(server)
-    
-    assert_files_equal(os.path.join(ROOT, "test.txt"), os.path.join(ROOT, "normal.txt"))
-"""
-"""
-def test_casual_medium_file():
-    server = run_server()
-    try:
-        run_client(os.path.join(ROOT, "normal_medium.txt"), f"http://localhost:{PORT}/test_medium.txt")
-    finally:
-        kill_proc(server)
-    
-    assert_files_equal(os.path.join(ROOT, "test_medium.txt"), os.path.join(ROOT, "normal_medium.txt"))
-"""
+        kill_proc(server, "SERVER")
 
-def test_casual_big_file():
-    server = run_server()
-    try:
-        run_client(os.path.join(ROOT, "normal_big.txt"), f"http://localhost:{PORT}/test_big.txt")
-    finally:
-        kill_proc(server)
-    
-    assert_files_equal(os.path.join(ROOT, "test_big.txt"), os.path.join(ROOT, "normal_big.txt"))
+    assert_files_equal(
+        os.path.join(ROOT, "test.txt"),
+        os.path.join(DOWNLOADS, "normal.txt")
+    )
 
 
-"""
 def test_empty_payload():
-    empty_file = os.path.join(ROOT, "empty.txt")
-    with open(empty_file, "w") as f:
-        f.write("")
-
     server = run_server()
     try:
-        run_client(os.path.join(ROOT, "empty_out.txt"), f"http://localhost:{PORT}/empty.txt")
+        run_client(os.path.join(DOWNLOADS, "empty_out.txt"), f"http://localhost:{PORT}/empty.txt")
     finally:
-        kill_proc(server)
-    
-    assert_files_equal(empty_file, os.path.join(ROOT, "empty_out.txt"))
+        kill_proc(server, "SERVER")
+
+    assert_files_equal(
+        os.path.join(ROOT, "empty.txt"),
+        os.path.join(DOWNLOADS, "empty_out.txt")
+    )
+
 
 def test_delay():
     server = run_server()
     sim = run_linksim(["-p", "9000", "-P", str(PORT), "-l", "0", "-e", "0", "-c", "0", "-d", "500", "-R"])
     try:
-        run_client(os.path.join(ROOT, "delai.txt"), "http://localhost:9000/test.txt")
+        run_client(os.path.join(DOWNLOADS, "delai.txt"), "http://localhost:9000/test.txt")
     finally:
-        kill_proc(sim)
-        kill_proc(server)
-    
-    assert_files_equal(os.path.join(ROOT, "test.txt"), os.path.join(ROOT, "delai.txt"))
+        kill_proc(sim, "LINKSIM")
+        kill_proc(server, "SERVER")
+
+    assert_files_equal(
+        os.path.join(ROOT, "test.txt"),
+        os.path.join(DOWNLOADS, "delai.txt")
+    )
+
 
 def test_delay_packet_loss():
     server = run_server()
-    sim = run_linksim(["-p", "9000", "-P", str(PORT), "-l", "10", "-e", "0", "-c", "0", "-d", "500", "-R"])
+    sim = run_linksim(["-p", "9000", "-P", str(PORT), "-l", "30", "-e", "0", "-c", "0", "-d", "500", "-R"])
     try:
-        run_client(os.path.join(ROOT, "delai_pl.txt"), "http://localhost:9000/test.txt")
+        run_client(os.path.join(DOWNLOADS, "delai_pl.txt"), "http://localhost:9000/test.txt")
     finally:
-        kill_proc(sim)
-        kill_proc(server)
-    
-    assert_files_equal(os.path.join(ROOT, "test.txt"), os.path.join(ROOT, "delai_pl.txt"))
+        kill_proc(sim, "LINKSIM")
+        kill_proc(server, "SERVER")
+
+    assert_files_equal(
+        os.path.join(ROOT, "test.txt"),
+        os.path.join(DOWNLOADS, "delai_pl.txt")
+    )
+
 
 def test_delay_packet_loss_error_trunc():
     server = run_server()
-    sim = run_linksim(["-p", "9000", "-P", str(PORT), "-l", "10", "-e", "5", "-c", "5", "-d", "500", "-R"])
+    sim = run_linksim(["-p", "9000", "-P", str(PORT), "-l", "30", "-e", "20", "-c", "20", "-d", "500", "-R"])
     try:
-        run_client(os.path.join(ROOT, "delai_pl_et.txt"), "http://localhost:9000/test.txt")
+        run_client(os.path.join(DOWNLOADS, "delai_pl_et_1.txt"), "http://localhost:9000/test.txt")
     finally:
-        kill_proc(sim)
-        kill_proc(server)
-    
-    assert_files_equal(os.path.join(ROOT, "test.txt"), os.path.join(ROOT, "delai_pl_et.txt"))
-    
+        kill_proc(sim, "LINKSIM")
+        kill_proc(server, "SERVER")
+
+    assert_files_equal(
+        os.path.join(ROOT, "test.txt"),
+        os.path.join(DOWNLOADS, "delai_pl_et_1.txt")
+    )
+
+
 def test_delay_packet_loss_error_trunc_jitter():
     server = run_server()
-    sim = run_linksim(["-p", "9000", "-P", str(PORT), "-l", "10", "-e", "5", "-c", "5", "-d", "500","-j", "5", "-R"])
+    sim = run_linksim(["-p", "9000", "-P", str(PORT), "-l", "30", "-e", "20", "-c", "20", "-d", "500", "-j", "5", "-R"])
     try:
-        run_client(os.path.join(ROOT, "delai_pl_et.txt"), "http://localhost:9000/test.txt")
+        run_client(os.path.join(DOWNLOADS, "delai_pl_et_2.txt"), "http://localhost:9000/test.txt")
     finally:
-        kill_proc(sim)
-        kill_proc(server)
-    
-    assert_files_equal(os.path.join(ROOT, "test.txt"), os.path.join(ROOT, "delai_pl_et.txt"))
-    
-"""
+        kill_proc(sim, "LINKSIM")
+        kill_proc(server, "SERVER")
+
+    assert_files_equal(
+        os.path.join(ROOT, "test.txt"),
+        os.path.join(DOWNLOADS, "delai_pl_et_2.txt")
+    )

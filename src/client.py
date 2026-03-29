@@ -69,6 +69,8 @@ def client(hostname,port,path,savefile):
     requests = []
     #objet qui gere l'encodage des paquets dans le fichier
     window = Window(WINDOW_SIZE,savefile)
+    
+    ack_it = 0
 
     #socket
     with socket.socket(socket.AF_INET6, socket.SOCK_DGRAM) as sock:
@@ -133,6 +135,7 @@ def client(hostname,port,path,savefile):
                     if(window.add_packet(packet)):
                         timestamp = gettimestamp()
                         #on envoie un ack pour valider la reception du paquet
+                        
                         ack = encode_pack(
                             ptype=2,          # ACK
                             window=window.remaining_window_size(),
@@ -150,6 +153,8 @@ def client(hostname,port,path,savefile):
                         f"timestamp : {timestamp}\n"
                         )
                         """
+                        
+                            
                         #si l'écriture du fichier est fini
                         #variable interne de l'objet window
                         if (window.file_written):

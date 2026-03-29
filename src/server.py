@@ -9,7 +9,7 @@ import time
 MAX_PACKET_SIZE = 1040
 MAX_PAYLOAD_LEN = 1024
 MAX_SEQNUM_MOD = 2048
-
+EPSILON_RTO = 10
 def compute_timestamp():
     """retourne le timestamp actuel en ms sur 32 bits"""
     return int(time.time()*1000) % 4294967296
@@ -33,7 +33,7 @@ def parse_args():
 def server(hostname,port,root):
     sessions = {}  # {addr: Session}
     with socket.socket(family = socket.AF_INET6, type = socket.SOCK_DGRAM) as sock:
-        sock.settimeout(1)
+        sock.settimeout(0.01)
         sock.bind((hostname, port))
         while True:
             #si après 1sec rien n'est arrivé, le serveur check les timeout des sessions et retransmet les paquets nécessaires
@@ -115,7 +115,7 @@ class Session:
             with open(full_path, "rb") as f:
                 self.data = f.read()
         except FileNotFoundError:
-            self.data = ""        
+            self.data = b""        
         
         self.timeout = 2 #timeout de départ en s
         self.addr = addr
@@ -124,20 +124,50 @@ class Session:
         self.base_seqnum = 0 #seqnum du prochain paquet à envoyer
         self.window_size = packet.window # nombre de paquets que le client peut recevoir en même temps
         self.packets = split_data(self.data)
+        self.last_send_check = 0
         
         self.rtt = []
-        self.rtt_len = 4
+        self.rtt_len = 4    
+        
         self.send_payloads_init()
 
-
+    def client_space(self,seqnum):
+        return self.packets[seqnum].timestamp == None
+    
     def send_payloads(self):
+        now = compute_timestamp()
+        
+        if now - self.last_send_check < 5:
+            return 
+        self.last_send_check = now
         
         j = 0
-        for seqnum in self.packets:
-
+        
+        #envoi seulement packet dans la window
+        for offset in range(self.window_size):
+            
+            seqnum = (self.base_seqnum + offset) % MAX_SEQNUM_MOD
+            if seqnum not in self.packets:
+                continue
+            
             if j >= self.window_size:
                 break
+            
+            #envoi des packets qui entrent dans la fenetre
             timestamp = compute_timestamp()
+            if self.client_space(seqnum):
+                self.packets[seqnum].timestamp = timestamp
+                packet = encode_pack(
+                    ptype=1,
+                    seqnum=seqnum,
+                    window=0,
+                    payload=self.packets[seqnum].payload,
+                    timestamp=timestamp
+                )
+                self.sock.sendto(packet, self.addr)
+                j += 1
+                continue
+            
             if  timestamp - self.packets[seqnum].timestamp  > self.packets[seqnum].rto:
                 self.packets[seqnum].timestamp = timestamp
                 self.packets[seqnum].rto = min(self.packets[seqnum].rto * 2, 60000) # exponential backoff du rto, max 60s
@@ -146,7 +176,7 @@ class Session:
                     seqnum=seqnum,
                     window=0,
                     payload=self.packets[seqnum].payload,
-                    timestamp=compute_timestamp()
+                    timestamp=timestamp
                 )
                 self.sock.sendto(packet, self.addr)
                 """
@@ -176,7 +206,7 @@ class Session:
                     seqnum=seqnum,
                     window=0,
                     payload=self.packets[seqnum].payload,
-                    timestamp=compute_timestamp()
+                    timestamp=timestamp
                 )
                 self.sock.sendto(packet, self.addr)
                 """
@@ -193,17 +223,27 @@ class Session:
 
     def receive(self, packet):
         # Supprimer les payloads acquittés et avancer la fenêtre
-        for i in range(self.base_seqnum, packet.seqnum):
-            if i in self.packets:
-                del self.packets[i]
+        
+        # nombre de paquets acquittés cumulativement
+        acked_count = (packet.seqnum - self.base_seqnum) % MAX_SEQNUM_MOD
+
+        for k in range(acked_count):
+            seq = (self.base_seqnum + k) % MAX_SEQNUM_MOD
+            if seq in self.packets:
+                del self.packets[seq]
                 
         # update les rto des packet non recu
+        """
         self.add_rtt(packet)
         new_rto = sum(self.rtt)/len(self.rtt) + 200 #+200 pour avoir un rto > rtt
-        self.update_rto(new_rto)
         
+        if (self.current_rto - new_rto > EPSILON_RTO):
+            self.update_rto(new_rto)
+            self.current_rto = new_rto
+        """
         self.base_seqnum = packet.seqnum
         self.window_size = packet.window
+        
         
         if not self.isdone():
             self.send_payloads()
@@ -239,12 +279,11 @@ def split_data(data):
     packets = {}
     n = 0
     for i in range(0, len(data), MAX_PAYLOAD_LEN):
-        timestamp = compute_timestamp()
-        packets[n] = Packetinfo(ptype = 1,window = 0, seqnum = n,  length = len(data[i:i + MAX_PAYLOAD_LEN]),payload = data[i:i + MAX_PAYLOAD_LEN], timestamp = timestamp, rto = 1000)
+        #timestamp = compute_timestamp()
+        packets[n] = Packetinfo(ptype = 1,window = 0, seqnum = n,  length = len(data[i:i + MAX_PAYLOAD_LEN]),payload = data[i:i + MAX_PAYLOAD_LEN], timestamp = None, rto = 2000)
         n = (n+1) % MAX_SEQNUM_MOD
     #bloc de fin de transfert
-    timestamp = compute_timestamp()
-    packets[n] = Packetinfo(ptype = 1,window = 0, seqnum = n,  length = 0,payload = b"", timestamp = timestamp, rto = 1000)
+    packets[n] = Packetinfo(ptype = 1,window = 0, seqnum = n,  length = 0,payload = b"", timestamp = None, rto = 2000)
 
     return packets
 
